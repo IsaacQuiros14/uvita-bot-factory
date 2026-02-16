@@ -26,10 +26,10 @@ async def verify_webhook(request: Request):
     verify_token = os.getenv("WHATSAPP_VERIFY_TOKEN", "test123")
     
     if mode == "subscribe" and token == verify_token:
-        print(f"Webhook verificado correctamente")
+        print("Webhook verificado correctamente")
         return PlainTextResponse(challenge)
     
-    print(f"Verificación fallida - Token incorrecto")
+    print("Verificacion fallida")
     return PlainTextResponse("Error", status_code=403)
 
 @app.post("/webhook")
@@ -37,15 +37,12 @@ async def receive_message(request: Request):
     try:
         data = await request.json()
         print(f"Mensaje recibido: {data}")
-        
         return {"status": "received", "timestamp": datetime.now().isoformat()}
-        
     except Exception as e:
-        print(f"Error procesando mensaje: {e}")
+        print(f"Error: {e}")
         return {"status": "error", "message": str(e)}
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-```
 
